@@ -113,7 +113,13 @@ class VDisk():
         self.s.disconnect()
 
     def delete_vdisk_size(self, vminstance, unit_number):
-        '''删除指定虚拟机的虚拟硬盘'''
+        '''删除虚拟机的硬盘
+        :parameter
+            @vvminstance: 虚拟机实例
+            @unit_number: 硬盘ID
+        :returns
+            pass
+        '''
         UNIT_NUMBER = unit_number  # Virtual disk unit number
         vm = vminstance
         # find the device to be removed
