@@ -83,5 +83,5 @@ def get_vmCreate_status(taskID):
         pkl_file.close()
         return error_info
 
-#print get_vmCreate_status('9f7e3244-190a-4786-8339-eea9f03b71d9')
+print get_vmCreate_status('20453795-59ad-4b46-82ba-0bd9365b549e')
 #all_get_vmCreate_status()

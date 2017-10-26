@@ -7,7 +7,7 @@ HOST = '192.168.1.182'
 
 USER = 'administrator'
 
-PASSWORD = 'Headway!@#0223.'
+PASSWORD = '1qaz@WSX'
 
 #任务ID和虚拟机列表绑定的数据文件
 #DTFile = 'C:\VMware\\taskID_vmlist.pk1'
