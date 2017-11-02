@@ -358,14 +358,14 @@ class VMAction(VMInstance):
             return False
 
     def vm_delete_vdisk(self, vminstance, unit_number):
-        '''删除虚拟机的虚拟硬盘
+        '''从虚拟机中移除硬盘，注意并未从存储彻底删除虚拟硬盘文件
         参数：
             vminstance： 虚拟机实例
             unit_number: 虚拟硬盘节点单元号
         '''
         try:
             for vm in vminstance:
-                vdisk.delete_vdisk_size(vm['obj'], unit_number)
+                vdisk.delete_vdisk(vm['obj'], unit_number)
             return True
         except Exception,e:
             print e

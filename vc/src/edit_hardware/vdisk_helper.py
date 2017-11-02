@@ -112,7 +112,7 @@ class VDisk():
             return False
         self.s.disconnect()
 
-    def delete_vdisk_size(self, vminstance, unit_number):
+    def delete_vdisk(self, vminstance, unit_number):
         '''删除虚拟机的硬盘
         :parameter
             @vvminstance: 虚拟机实例

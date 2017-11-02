@@ -10,7 +10,6 @@ from src.vmExistChecked import aVM_ExistChecked, vmListExistChecked
 from src.createVM_Main import create_vm_main, checkRepeat_VM_Name
 from src.get_vm_create_status import get_vmCreate_status
 import json
-import time
 
 vminstance = VMInstance()
 vmaction = VMAction()

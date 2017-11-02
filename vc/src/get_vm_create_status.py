@@ -5,6 +5,8 @@ from vc.src.vmExistChecked import vmListExistChecked
 from vc.src.device_info.vm_info import VM_Info
 from vc.src.conf import DTFile
 
+from db import table_urun_task_id
+
 vminstance = VMInstance()
 vminfo = VM_Info()
 
@@ -48,22 +50,23 @@ def ipCheck(vmlist):
 
 def get_vmCreate_status(taskID):
     '''通过任务ID查询虚拟机的信息'''
-    try:
-        pkl_file = open(DTFile, 'rb')
-    except Exception:
-        error_info = {"success": False, "data": "null", "errorCode": 23412, "errorDesc": "database has no data"}
-        return error_info
-    res = None
-    while True:
-        try:
-            data = pickle.load(pkl_file)
-            if data.has_key(taskID):
-                res = data.get(taskID, None)
-            else:pass
-        except EOFError:
-            break
+    # try:
+    #     pkl_file = open(DTFile, 'rb')
+    # except Exception:
+    #     error_info = {"success": False, "data": "null", "errorCode": 23412, "errorDesc": "database has no data"}
+    #     return error_info
+    # res = None
+    # while True:
+    #     try:
+    #         data = pickle.load(pkl_file)
+    #         if data.has_key(taskID):
+    #             res = data.get(taskID, None)
+    #         else:pass
+    #     except EOFError:
+    #         break
+    res = table_urun_task_id.readData_from_table_urunTaskID(taskID)
     if res:
-        vmlist = res["vmlist"]
+        vmlist = res
         ipCheckResult = ipCheck(vmlist) #这里调用虚拟机的创建状态，通过获取到IP地址并是否能Ping通来判断部署成功与否
         if len(ipCheckResult['createDone']) == 0:
             #如果createDone列表完全没有可用的虚拟机则告知用户虚拟机还在创建
@@ -80,8 +83,7 @@ def get_vmCreate_status(taskID):
             return res
     else:
         error_info = {"success": False, "data": "null", "errorCode": 992200, "errorDesc": "task ID is not found"}
-        pkl_file.close()
         return error_info
 
-print get_vmCreate_status('20453795-59ad-4b46-82ba-0bd9365b549e')
+#print get_vmCreate_status('20453795-59ad-4b46-82ba-0bd9365b549e')
 #all_get_vmCreate_status()

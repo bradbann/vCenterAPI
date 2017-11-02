@@ -1,6 +1,7 @@
 #coding:utf-8
 from pysphere import MORTypes
 from vc.src.conn_vcserver import ConnHelper
+from vc.src.powercli.psData.psDataHandler import portGroup_Data
 
 class BaseInfo:
     _conn = ConnHelper()
@@ -86,8 +87,9 @@ class BaseInfo:
         self._baseData.append(dt)
 
     def __get_network_label(self):
-        '''获取网络标签，目前为手动添加'''
-        network_label = ["br-int", "br-vlan", "public", "VM Network"]
+        '''获取网络标签'''
+        #network_label = ["br-int", "br-vlan", "public", "VM Network"]
+        network_label = portGroup_Data()
         dt = {"networkLabel":network_label}
         self._baseData.append(dt)
 
