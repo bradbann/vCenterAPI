@@ -64,7 +64,7 @@ def get_vmCreate_status(taskID):
     #         else:pass
     #     except EOFError:
     #         break
-    res = table_urun_task_id.readData_from_table_urunTaskID(taskID)
+    res = table_urun_task_id.readData_from_table_urunTaskID(taskID) #从数据库中读取taskid
     if res:
         vmlist = res
         ipCheckResult = ipCheck(vmlist) #这里调用虚拟机的创建状态，通过获取到IP地址并是否能Ping通来判断部署成功与否

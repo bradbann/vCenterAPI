@@ -26,7 +26,7 @@ def readAll_from_table_urunTaskID():
     for i in taskID_Data:
         print "UUID:%s %s" % (i.taskid, i.vmlist)
 
-# a = readData_from_table_urunTaskID("ba1521b6-016b-4e13-8cf9-ceff41f60f43-2")
+# a = readData_from_table_urunTaskID("f0714efe-3810-4c78-bd7f-6fbbf64f885d")
 # print a
 #readAll_from_table_urunTaskID()
 

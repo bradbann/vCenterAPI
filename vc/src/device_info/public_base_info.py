@@ -1,7 +1,8 @@
 #coding:utf-8
 from pysphere import MORTypes
+
 from vc.src.conn_vcserver import ConnHelper
-from vc.src.powercli.psData.psDataHandler import portGroup_Data
+from vc.src.db.table_ps_netlabel import readData_from_table_ps_netlabel
 
 class BaseInfo:
     _conn = ConnHelper()
@@ -89,7 +90,7 @@ class BaseInfo:
     def __get_network_label(self):
         '''获取网络标签'''
         #network_label = ["br-int", "br-vlan", "public", "VM Network"]
-        network_label = portGroup_Data()
+        network_label = readData_from_table_ps_netlabel()
         dt = {"networkLabel":network_label}
         self._baseData.append(dt)
 

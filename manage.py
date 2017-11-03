@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 import os
 import sys
-import threading
-from vc.src.powercli.psScriptCall import get_port_group
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "VMware.settings")
-    threading.Thread(target=get_port_group).start()
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
