@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^createvm/', create_vms),
     url(r'^getCreateStatus/', get_VM_CreateStatus),
     url(r'^getvm/', get_vmName),
+    url(r'^updateNetlabel/', update_netlabel),
 ]

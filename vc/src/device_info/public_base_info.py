@@ -1,6 +1,5 @@
 #coding:utf-8
-from pysphere import MORTypes
-
+from pysphere import MORTypes, VIProperty
 from vc.src.conn_vcserver import ConnHelper
 from vc.src.db.table_ps_netlabel import readData_from_table_ps_netlabel
 
@@ -12,13 +11,22 @@ class BaseInfo:
 
     def __get_esxi_host(self):
         '''获取esxi host'''
-        hostid = self.s.get_hosts().keys()
-        hostname =  self.s.get_hosts().values()
         esxi_list = []
-        for i in range(len(hostid)):
-            dt = {"HostID":hostid[i], "HostName":hostname[i]}
+        for ds_mor, name in self.s.get_hosts().items():
+            props = VIProperty(self.s, ds_mor)
+            powerState = props.runtime.powerState  # power status
+            date = props.runtime.bootTime  # boot time
+            bootTime = "%s-%s-%s %s:%s:%s" % (date[0], date[1], date[2], date[3], date[4], date[5])
+            props._flush_cache()
+            cpuUsage = props.summary.quickStats.overallCpuUsage  # get esxi cpu Usage
+            MemoryUsage = props.summary.quickStats.overallMemoryUsage
+            CpuCores = props.hardware.cpuInfo.numCpuCores
+            MemorySize = props.hardware.memorySize
+            dt = {"HostID": ds_mor, "HostName": name, "powerState":powerState, "bootTime":bootTime, "cpuUsage":cpuUsage,
+                  "MemoryUsage":MemoryUsage,"CpuCores":CpuCores,"MemorySize":MemorySize
+                  }
             esxi_list.append(dt)
-        dd = {"Esxi":esxi_list}
+        dd = {"Esxi": esxi_list}
         self._baseData.append(dd)
 
     def __get_cluster(self):
@@ -45,11 +53,12 @@ class BaseInfo:
 
     def __get_datastore(self):
         '''获取datastore'''
-        datastoreid = self.s.get_datastores().keys()
-        datastorename =  self.s.get_datastores().values()
         datastore_list = []
-        for i in range(len(datastoreid)):
-            dt = {"DatastoreID":datastoreid[i], "DatastoreName":datastorename[i]}
+        for ds_mor, name in self.s.get_datastores().items():
+            props = VIProperty(self.s, ds_mor)
+            Capacity = props.summary.capacity / 1024 / 1024 / 1024
+            FreeSpace = props.summary.freeSpace / 1024 / 1024 / 1024
+            dt = {"DatastoreID": ds_mor, "DatastoreName": name, "Capacity": Capacity, "FreeSpace": FreeSpace}
             datastore_list.append(dt)
         dd = {"Datastore":datastore_list}
         self._baseData.append(dd)

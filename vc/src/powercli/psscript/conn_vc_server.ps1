@@ -13,5 +13,5 @@ if ( $moduleName.Name -ne "VMware.VimAutomation.Core" ){
 Write-Host "VMware.VimAutomation.Core 模块状态可用"
 
 Write-Host "连接vCenter Server..."
-Connect-VIServer -Server $server -User $user -Password $password
+Connect-VIServer -Server $server -User $user -Password $password > $null
 
