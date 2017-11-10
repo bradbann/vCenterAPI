@@ -26,4 +26,6 @@ urlpatterns = [
     url(r'^getCreateStatus/', get_VM_CreateStatus),
     url(r'^getvm/', get_vmName),
     url(r'^updateNetlabel/', update_netlabel),
+    url(r'^updateDatastoreEsxi/', update_datastoreAndEsxi_relation),
+
 ]

@@ -85,5 +85,5 @@ def get_vmCreate_status(taskID):
         error_info = {"success": False, "data": "null", "errorCode": 992200, "errorDesc": "task ID is not found"}
         return error_info
 
-#print get_vmCreate_status('20453795-59ad-4b46-82ba-0bd9365b549e')
+#print get_vmCreate_status('4d140a9d-52d8-4da6-8ba4-2026ae089052')
 #all_get_vmCreate_status()

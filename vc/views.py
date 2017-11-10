@@ -10,7 +10,7 @@ from src.device_info.public_base_info import BaseInfo
 from src.vmExistChecked import aVM_ExistChecked, vmListExistChecked
 from src.createVM_Main import create_vm_main, checkRepeat_VM_Name
 from src.get_vm_create_status import get_vmCreate_status
-from src.powercli.psDataHandler import ps_netlabel_Handler
+from src.powercli.update_data_handler import update_netlabel, update_datastore_And_esxi_relation
 
 vminstance = VMInstance()
 vmaction = VMAction()
@@ -129,13 +129,22 @@ def info_public_data(request):
     baseinfo.del_baseData_List()  # 清空原存储列表
     return HttpResponse(json.dumps(result))
 
-def update_netlabel(request):
-    result = ps_netlabel_Handler()
+def update_netlabels(request):
+    result = update_netlabel()
     if result:
         result = {"success": True, "data":"", "errorCode": "null", "errorDesc": "null"}
         return HttpResponse(json.dumps(result))
     else:
         error_info = {"success": False, "data":"", "errorCode":901020678, "errorDesc": "Network tag gets update failed"}
+        return HttpResponse(json.dumps(error_info))
+
+def update_datastoreAndEsxi_relation(request):
+    result = update_datastore_And_esxi_relation()
+    if result:
+        result = {"success": True, "data": "", "errorCode": "null", "errorDesc": "null"}
+        return HttpResponse(json.dumps(result))
+    else:
+        error_info = {"success": False, "data": "", "errorCode": 11223309,"errorDesc": "update failed"}
         return HttpResponse(json.dumps(error_info))
 
 def vm_public_action(request):

@@ -2,6 +2,7 @@
 from pysphere import MORTypes, VIProperty
 from vc.src.conn_vcserver import ConnHelper
 from vc.src.db.table_ps_netlabel import readData_from_table_ps_netlabel
+from vc.src.relationship_between_check import datastore_host_relation
 
 class BaseInfo:
     _conn = ConnHelper()
@@ -55,10 +56,11 @@ class BaseInfo:
         '''获取datastore'''
         datastore_list = []
         for ds_mor, name in self.s.get_datastores().items():
+            esxi = datastore_host_relation(name) #通过存储名称检查属于哪台ESXI
             props = VIProperty(self.s, ds_mor)
             Capacity = props.summary.capacity / 1024 / 1024 / 1024
             FreeSpace = props.summary.freeSpace / 1024 / 1024 / 1024
-            dt = {"DatastoreID": ds_mor, "DatastoreName": name, "Capacity": Capacity, "FreeSpace": FreeSpace}
+            dt = {"Esxi":esxi,"DatastoreID": ds_mor, "DatastoreName": name, "Capacity": Capacity, "FreeSpace": FreeSpace}
             datastore_list.append(dt)
         dd = {"Datastore":datastore_list}
         self._baseData.append(dd)
