@@ -7,8 +7,8 @@ conn_obj = ConnHelper()
 server = conn_obj.start_connect_server()
 
 def change_memory_size(vminstance, memory_gb):
-    '''修改虚拟机的内存大小'''
-    memory_mb = memory_gb * 1024 #GB转换MB
+    '''Modify the memory size of the virtual machine'''
+    memory_mb = memory_gb * 1024 #GB conversion MB
     vm_obj = vminstance
     request = VI.ReconfigVM_TaskRequestMsg()
     _this = request.new__this(vm_obj._mor)
@@ -16,7 +16,7 @@ def change_memory_size(vminstance, memory_gb):
     request.set_element__this(_this)
     spec = request.new_spec()
 
-    # 设置内存大小
+    # Memory size
     spec.set_element_memoryMB(memory_mb)
 
     request.set_element_spec(spec)

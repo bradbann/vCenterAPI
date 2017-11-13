@@ -5,16 +5,17 @@ from vc.src.conn_vcserver import ConnHelper
 import sys
 
 class VDisk():
-    '''这个类主要是关于虚拟磁盘的操作:添加磁盘;修改磁盘大小;'''
+    '''This class is mostly about virtual disk operations：adding disks，Modify disk size'''
     _conn = ConnHelper()
     def __init__(self):
         self.s = self._conn.start_connect_server()
 
     def add_vdisk(self, vminstance, datastore_name, vdisk_size_gb):
-        '''添加磁盘'''
+        '''add disk'''
         vdisk_size_kb = vdisk_size_gb * 1024 * 1024
         vm = vminstance
-        # 虚拟设备节点号码
+
+        # Virtual device node number
         Unit_Number = ""
         Temp_Number = 1
         # find the device to be removed

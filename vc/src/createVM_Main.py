@@ -8,7 +8,10 @@ from db import table_urun_task_id
 vmaction = VMAction()
 
 def checkRepeat_VM_Name(vmlist):
-    # 检查虚拟机名称重复的VM，重复的VM名称返回给调用方，可用的虚拟机名称传入创建虚拟机函数
+    '''Check the VM that the virtual machine name repeats, the duplicate VM name is
+    returned to the caller, and the virtual machine name that is available is passed
+    in to create the virtual machine function
+    '''
     repeat_vm_list = []
     able_vm_list = []
     for vm in vmlist:
@@ -21,27 +24,21 @@ def checkRepeat_VM_Name(vmlist):
     return dt
 
 def taskBinding(taskID, vmlist):
-    #任务ID和虚拟机列表绑定，查询是否创建成功时，通过任务ID进行查询
-    # date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    # dt = {taskID: {"vmlist": vmlist, "date":date}}  # 用UUID作为key
-    # try:
-    #     taskID_vmlist = open("taskID_vmlist.pk1", 'ab')
-    # except Exception:
-    #     print "Task ID, write database error"
-    # else:
-    #     pickle.dump(dt, taskID_vmlist) #将数据用pickle模块进行序列化存储
-    #     taskID_vmlist.close()
-    table_urun_task_id.writeData_to_table_urunTaskID(taskid=taskID, vmlist=vmlist) # 任务ID和虚拟列表写入数据库
+    '''The task ID is bound to the virtual machine list, and queries are made by the
+    task ID when the query iscreated successfully
+    '''
+    table_urun_task_id.writeData_to_table_urunTaskID(taskid=taskID, vmlist=vmlist) #  task ID and the virtual list are written to the database
 
 def create_vm_main(vmlist=None, template_name=None, resourceid=None, hostid=None, datastoreid=None, number=None, nameprefix=None, taskID=None):
 
-    taskBinding(taskID, vmlist) #任务ID和虚拟机列表绑定
+    taskBinding(taskID, vmlist) #Task ID and virtual machine list binding
 
-    # 创建指定名称的虚拟机，如创建一台vmlist=["vm1"],或 多台vmlist=["vm2", "vm3"]
+    # Create a virtual machine specifying a name, such as create a vmlist=["vm1"], or multiple vmlist=["vm2", "vm3"]
     if vmlist != None:
         for vm in vmlist:
             vmaction.vm_from_template_create(name=vm, template_name=template_name, pool=resourceid, esx=hostid, lun=datastoreid)
-    # 创建指定数量的虚拟机，并传入名称后缀进行创建
+
+    # Creates a specified number of virtual machines and passes the name suffix to create
     if number != None or nameprefix != None:
         for vm in vmlist:
             vmaction.vm_from_template_create(name=vm, template_name=template_name, pool=resourceid, esx=hostid, lun=datastoreid)

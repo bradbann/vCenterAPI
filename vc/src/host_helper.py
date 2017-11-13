@@ -24,5 +24,4 @@ class PhysicalHost(ConnHelper):
 
 if __name__ == '__main__':
 
-    a = PhysicalHost()
-    a.get_host_info()
+    pass

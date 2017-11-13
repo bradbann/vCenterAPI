@@ -3,16 +3,16 @@ import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "VMware.settings")
 django.setup()
 
-# 导入表
+# import tables
 from vc.models import urun_task_id
 
 def writeData_to_table_urunTaskID(taskid, vmlist):
-    #数据入库
+    # Write data to the database
     for vm in vmlist:
         urun_task_id.objects.create(taskid=taskid, vmlist=vm)
 
 def readData_from_table_urunTaskID(taskid=None):
-    #通过任务ID获取虚拟机列表
+    # Get the list of virtual machines by task ID
     dt_list = []
     taskid_Data = urun_task_id.objects.all().values("taskid", "vmlist")
     if taskid_Data:
@@ -24,7 +24,7 @@ def readData_from_table_urunTaskID(taskid=None):
         return False
 
 def readAll_from_table_urunTaskID():
-    # GET所有数据
+    '''Query all data'''
     taskID_Data = urun_task_id.objects.all()
     for i in taskID_Data:
         print "UUID:%s %s" % (i.taskid, i.vmlist)

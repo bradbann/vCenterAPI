@@ -11,7 +11,7 @@ class BaseInfo:
         self.s = self._conn.start_connect_server()
 
     def __get_esxi_host(self):
-        '''获取esxi host'''
+        '''get esxi host'''
         esxi_list = []
         for ds_mor, name in self.s.get_hosts().items():
             props = VIProperty(self.s, ds_mor)
@@ -31,7 +31,7 @@ class BaseInfo:
         self._baseData.append(dd)
 
     def __get_cluster(self):
-        '''获取集群'''
+        '''get cluster info'''
         clusterid = self.s.get_clusters().keys()
         clustername = self.s.get_clusters().values()
         cls_list = []
@@ -42,7 +42,7 @@ class BaseInfo:
         self._baseData.append(dd)
 
     def __get_datacenter(self):
-        '''获取数据中心'''
+        '''get datacenter info'''
         datacenterid = self.s.get_datacenters().keys()
         datacentername = self.s.get_datacenters().values()
         data_center_list = []
@@ -53,10 +53,10 @@ class BaseInfo:
         self._baseData.append(dd)
 
     def __get_datastore(self):
-        '''获取datastore'''
+        '''get datastore info'''
         datastore_list = []
         for ds_mor, name in self.s.get_datastores().items():
-            esxi = datastore_host_relation(name) #通过存储名称检查属于哪台ESXI
+            esxi = datastore_host_relation(name) # Check which ESXI you belong to by storing the name
             props = VIProperty(self.s, ds_mor)
             Capacity = props.summary.capacity / 1024 / 1024 / 1024
             FreeSpace = props.summary.freeSpace / 1024 / 1024 / 1024
@@ -66,7 +66,7 @@ class BaseInfo:
         self._baseData.append(dd)
 
     def __get_resource_pool(self):
-        '''获取资源池'''
+        '''get resource pools info'''
         rpid = self.s.get_resource_pools().keys()
         rpname = self.s.get_resource_pools().values()
         if len(rpid) == 0 or len(rpname) == 0:
@@ -80,7 +80,7 @@ class BaseInfo:
         self._baseData.append(dd)
 
     def __get_vm_templates(self):
-        '''获取虚拟机模板'''
+        '''Get the virtual machine template'''
         props = self.s._retrieve_properties_traversal(
             property_names=['name', 'config.template'],
             from_node=None, obj_type=MORTypes.VirtualMachine)
@@ -99,7 +99,7 @@ class BaseInfo:
         self._baseData.append(dt)
 
     def __get_network_label(self):
-        '''获取网络标签'''
+        '''Get the network tag'''
         #network_label = ["br-int", "br-vlan", "public", "VM Network"]
         network_label = readData_from_table_ps_netlabel()
         dt = {"networkLabel":network_label}

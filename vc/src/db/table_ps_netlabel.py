@@ -7,7 +7,7 @@ django.setup()
 from vc.models import ps_netlabel
 
 def readData_from_table_ps_netlabel():
-    '''读取ps_netlabel表所有数据'''
+    '''Read the ps_netlabel table for all data'''
     dt = []
     data = ps_netlabel.objects.all()
     for i in data:
@@ -15,6 +15,6 @@ def readData_from_table_ps_netlabel():
     return dt
 
 def emptData_from_table_ps_netlabel():
-    '''清空表中的数据'''
-    print "数据库表：ps_netlabel 正在重置..."
+    '''Empty table data'''
+    print "Database table: ps_netlabel is being reset..."
     ps_netlabel.objects.filter().delete()

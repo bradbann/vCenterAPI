@@ -2,20 +2,14 @@
 from vc.src.vm_helper import VMInstance
 
 class VM_Info(VMInstance):
-    '''这个类用于获取虚拟机的基础数据'''
-
-    def __init__(self):
-        pass
+    '''This class is used to obtain virtual machine information'''
 
     def get_vm_basic_info(self, vminstance):
-        '''获取虚拟机基础信息
-        参数:
-            vminstance: 虚拟机实例
-        '''
+        '''Vm common information'''
         try:
             data_total = []
             for vm in vminstance:
-                # 获取磁盘信息
+                # Get the disk information
                 data = vm['obj']._disks
                 disk_list = []
                 for i in range(len(data)):
@@ -26,7 +20,7 @@ class VM_Info(VMInstance):
                     vdiskData = {"vDiskunitNumber":vDiskunitNumber,"vdiskFile": vdiskFile, "vdiskSize": vdiskSize, "vdiskName":vdiskName}
                     disk_list.append(vdiskData)
 
-                #获取网卡信息
+                #Get the network card information
                 nic_list = []
                 for dev in vm["obj"].properties.config.hardware.device:
                     if dev._type in ["VirtualVmxnet3", "VirtualE1000", "VirtualE1000e", "VirtualPCNet32", "VirtualVmxnet"]:  # 过滤有哪些适配器类型，如有新的类型，需在这里添加
@@ -36,7 +30,7 @@ class VM_Info(VMInstance):
                                     }
                         nic_list.append(nic_data)
 
-                #获取虚拟机快照信息
+                #Get the virtual machine snapshot information
                 snapshots_list = []
                 snapshots_instance = vm["obj"].get_snapshots()
                 for snapshots_items in snapshots_instance:
@@ -53,14 +47,14 @@ class VM_Info(VMInstance):
                     }
                     snapshots_list.append(snapshots_data)
 
-                vm_status = vm["obj"].get_status() #获取电源状态
-                esxi_host = vm["obj"].properties.runtime.host.name #获取所承载的物理机
-                vmIdent = vm['obj']._mor #获取虚拟机唯一标识
-                osType = vm['obj']._properties["guest_full_name"] #获取操作系统类型
-                memory_mb_size = vm['obj']._properties["memory_mb"] #获取内存大小，单位MB
-                cpuNumber = vm['obj']._properties["num_cpu"] #获取CPU数量
+                vm_status = vm["obj"].get_status()
+                esxi_host = vm["obj"].properties.runtime.host.name #Belonging to a physical machine
+                vmIdent = vm['obj']._mor
+                osType = vm['obj']._properties["guest_full_name"]
+                memory_mb_size = vm['obj']._properties["memory_mb"]
+                cpuNumber = vm['obj']._properties["num_cpu"]
 
-                #获取虚拟机IP地址
+                #Gets the virtual machine IP address
                 vmip = None
                 try:
                     vm["obj"].properties._flush_cache()
@@ -69,7 +63,7 @@ class VM_Info(VMInstance):
                 except AttributeError:
                     vmip = "null"
 
-                #数据数据汇总
+                #Summary data
                 data_total.append({"osType":osType,
                                     "ip":vmip,
                                     "vmIdent":vmIdent,
