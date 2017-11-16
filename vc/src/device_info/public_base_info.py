@@ -67,12 +67,12 @@ class BaseInfo:
 
     def __get_resource_pool(self):
         '''get resource pools info'''
+        rplist = []
         rpid = self.s.get_resource_pools().keys()
         rpname = self.s.get_resource_pools().values()
         if len(rpid) == 0 or len(rpname) == 0:
-            print "rpid,rpname not data..."
-
-        rplist = []
+            dd = {"ResourcePool": rplist}
+            self._baseData.append(dd) # Even if there is no data, there is an empty list
         for i in range(len(rpid)):
             dt = {"ResourceID":rpid[i], "ResourceName":rpname[i]}
             rplist.append(dt)
