@@ -1,9 +1,7 @@
 #coding:utf-8
 from pysphere import MORTypes, VIProperty
 from vc.src.conn_vcserver import ConnHelper
-from vc.src.db.table_ps_netlabel import readData_from_table_ps_netlabel
-from vc.src.relationship_between_check import datastore_host_relation
-
+from vc.src.PyVmOmi.GetPublicInfo import *
 class BaseInfo:
     _conn = ConnHelper()
     _baseData = []
@@ -54,29 +52,12 @@ class BaseInfo:
 
     def __get_datastore(self):
         '''get datastore info'''
-        datastore_list = []
-        for ds_mor, name in self.s.get_datastores().items():
-            esxi = datastore_host_relation(name) # Check which ESXI you belong to by storing the name
-            props = VIProperty(self.s, ds_mor)
-            Capacity = props.summary.capacity / 1024 / 1024 / 1024
-            FreeSpace = props.summary.freeSpace / 1024 / 1024 / 1024
-            dt = {"Esxi":esxi,"DatastoreID": ds_mor, "DatastoreName": name, "Capacity": Capacity, "FreeSpace": FreeSpace}
-            datastore_list.append(dt)
-        dd = {"Datastore":datastore_list}
+        dd = {"Datastore":getDatastore()}
         self._baseData.append(dd)
 
     def __get_resource_pool(self):
         '''get resource pools info'''
-        rplist = []
-        rpid = self.s.get_resource_pools().keys()
-        rpname = self.s.get_resource_pools().values()
-        if len(rpid) == 0 or len(rpname) == 0:
-            dd = {"ResourcePool": rplist}
-            self._baseData.append(dd) # Even if there is no data, there is an empty list
-        for i in range(len(rpid)):
-            dt = {"ResourceID":rpid[i], "ResourceName":rpname[i]}
-            rplist.append(dt)
-        dd = {"ResourcePool":rplist}
+        dd = {"ResourcePool":getResourcePool()}
         self._baseData.append(dd)
 
     def __get_vm_templates(self):
@@ -100,8 +81,7 @@ class BaseInfo:
 
     def __get_network_label(self):
         '''Get the network tag'''
-        #network_label = ["br-int", "br-vlan", "public", "VM Network"]
-        network_label = readData_from_table_ps_netlabel()
+        network_label = getPortGroup()
         dt = {"networkLabel":network_label}
         self._baseData.append(dt)
 

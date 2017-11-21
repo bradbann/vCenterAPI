@@ -7,7 +7,7 @@ django.setup()
 from vc.models import urun_task_id
 
 def writeData_to_table_urunTaskID(taskid, vmlist):
-    # Write data to the database
+    #  task ID and the virtual machine list are written to the database
     for vm in vmlist:
         urun_task_id.objects.create(taskid=taskid, vmlist=vm)
 
