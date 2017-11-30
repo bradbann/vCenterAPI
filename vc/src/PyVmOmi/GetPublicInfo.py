@@ -1,41 +1,51 @@
+from pyVmomi import vim
 from VMOmiConn import VMOmiConn
 
 c = VMOmiConn()
-server = c.startConn()
-datacenter = server.content.rootFolder.childEntity
+s = c.startConn()
+
+def get_resources_all_obj(vimtype=None):
+    """Just by vimtype to get resource all object, return a list"""
+    obj_list = []
+    container = s.content.viewManager.CreateContainerView(
+        s.content.rootFolder, vimtype, True)
+    for c in container.view:
+        obj_list.append(c)
+    if obj_list:
+        return obj_list
+    else:
+        print("Object of vimtype: {vimtypes} not found".format(vimtypes=vimtype))
+        return obj_list
 
 def getPortGroup():
     pglist = []
-    for item in datacenter:
-        for pg in item.networkFolder.childEntity:
-            pglist.append(pg.name)
+    netObjList = get_resources_all_obj(vimtype=[vim.Network])
+    for netobj in netObjList:
+        pglist.append(netobj.name)
     return pglist
 
 def getDatastore():
-    dstorelist = []
-    for item in datacenter:
-        for lun in item.datastoreFolder.childEntity:
-            for lunObj in lun.childEntity:
-                host = None
-                for hostObj in lunObj.host:
-                    host = hostObj.key.name
-                dtDict = {
-                    "Esxi": host,
-                    "FreeSpace": lunObj.summary.freeSpace,
-                    "DatastoreName": lunObj.summary.name,
-                    "Capacity": lunObj.summary.capacity,
-                    "DatastoreID": str(lunObj.summary.datastore).split(":")[1].replace("'","")
-                }
-                dstorelist.append(dtDict)
-    return dstorelist
+    dstor_obj = get_resources_all_obj(vimtype=[vim.Datastore])
+    dstor_list = []
+    for dstor in dstor_obj:
+        for host in dstor.host:
+            hostname = host.key.name
+        # The "Capacity" and "FreeSpace" units are bytes
+        dstor_dict = {"Esxi": hostname,
+                      "DatastoreName": dstor.name,
+                      "Capacity": dstor.summary.capacity,
+                      "FreeSpace": dstor.summary.freeSpace,
+                      "DatastoreID": str(dstor.summary.datastore).split(":")[1].replace("'", "")
+                      }
+        dstor_list.append(dstor_dict)
+    return dstor_list
 
 def getResourcePool():
-    rlist = []
-    for item in datacenter:
-        for rpool in item.hostFolder.childEntity:
-            dt = rpool.resourcePool
-            rlist.append({
-                "ResourceID":str(dt.config.entity).split(":")[1].replace("'",""),
-                "ResourceName":dt.name
-            })
-    return rlist
+    rplist = []
+    rObjList = get_resources_all_obj(vimtype=[vim.ResourcePool])
+    for rpool in rObjList:
+        rpdict = {"ResourceID": str(rpool.config.entity).split(":")[1].replace("'",""),
+        "ResourceName": rpool.name
+        }
+        rplist.append(rpdict)
+    return rplist
